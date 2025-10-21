@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pictures Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .picture-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .picture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+        
+        .picture-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .picture-info {
+            padding: 15px;
+        }
+        
+        .picture-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .picture-description {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 60px 20px;
+        }
+        
+        .empty-state h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .add-picture-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .add-picture-btn:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 Pictures Gallery</h1>
+            <p class="subtitle">A beautiful collection of images</p>
+        </header>
+        
+        <div id="gallery" class="gallery"></div>
+        
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <h2>No pictures yet!</h2>
+            <p>Start by adding pictures to the pictures.json file</p>
+            <a href="#" class="add-picture-btn">Learn More</a>
+        </div>
+    </div>
+    
+    <script>
+        // Load pictures from pictures.json
+        async function loadPictures() {
+            try {
+                const response = await fetch('pictures.json');
+                const data = await response.json();
+                displayPictures(data.pictures || []);
+            } catch (error) {
+                console.error('Error loading pictures:', error);
+                displayPictures([]);
+            }
+        }
+        
+        function displayPictures(pictures) {
+            const gallery = document.getElementById('gallery');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (pictures.length === 0) {
+                gallery.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            gallery.innerHTML = pictures.map(picture => `
+                <div class="picture-card">
+                    <img src="${picture.url}" alt="${picture.title}" class="picture-image" 
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f5f7fa%22 width=%22300%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23999%22 font-family=%22Arial%22 font-size=%2218%22%3EImage not found%3C/text%3E%3C/svg%3E'">
+                    <div class="picture-info">
+                        <div class="picture-title">${picture.title}</div>
+                        <div class="picture-description">${picture.description || 'No description available'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Load pictures when page loads
+        loadPictures();
+    </script>
+</body>
+</html>
