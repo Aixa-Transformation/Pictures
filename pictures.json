@@ -1,0 +1,19 @@
+{
+  "pictures": [
+    {
+      "title": "Sample Picture 1",
+      "description": "This is a sample picture. Replace with your own images.",
+      "url": "https://via.placeholder.com/400x300/667eea/ffffff?text=Picture+1"
+    },
+    {
+      "title": "Sample Picture 2",
+      "description": "Another example picture in the gallery.",
+      "url": "https://via.placeholder.com/400x300/764ba2/ffffff?text=Picture+2"
+    },
+    {
+      "title": "Sample Picture 3",
+      "description": "Add your own pictures by editing pictures.json",
+      "url": "https://via.placeholder.com/400x300/f093fb/ffffff?text=Picture+3"
+    }
+  ]
+}
